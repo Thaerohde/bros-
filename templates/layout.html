@@ -24,13 +24,17 @@
     </head>
 
     <body>
-        <background img =""></background>
         <nav class="navbar navbar-expand-md navbar-light bg-light border">
             <div class="container">
             <a class="navbar-brand" href="/"><span class="blue">Sports Finder</span></a>
             <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
+           <div class= "fullscreen-bg">
+                <video loop autoplay poster="img/videoframe.jpg" class="fullscreen-bg__video">
+                <source src="/static/video1.mp4">
+            </video>
+            </div>
             <div class="collapse navbar-collapse" id="navbar">
                 {% if session.id %}
                     <ul class="navbar-nav mr-auto mt-2"><br>
