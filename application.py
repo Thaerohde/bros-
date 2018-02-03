@@ -25,7 +25,6 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-
 sql_man = User_Data()
 
 @app.route("/",methods=["GET", "POST"])
@@ -73,7 +72,7 @@ def login():
         session["id"] = rows[0]["id"]
 
         # Redirect user to home page
-        flash("welcome " + rows[0]["username"])
+        flash("welcome " + username)
         return redirect("/start")
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -116,6 +115,7 @@ def register():
 
         # Remember which user has logged in
         session["id"] = newUser
+
         # Redirect user to register page
         flash("Welcome " + username)
         return redirect("/start")
@@ -171,14 +171,26 @@ def joinevent():
 def eventspage():
     events = sql_man.get_available_events()
     if request.method == "POST":
+
+        # validate the event
         if not events:
             flash("there are no events yet")
             return render_template("start.html")
+
+        # knowing which event the user wants to join
         wanted_event = request.form.get("join")
-        print(wanted_event)
+
+        # getting details for wanted event
+        event_details = request.form.get("veiwDetails")
+
+        if event_details:
+            render_template("event.html", event = event_details)
+
         if sql_man.already_participant(session["id"], wanted_event):
             flash("you're already participating!")
             return render_template("eventspage.html", events = events)
+
+        # adding participant to the event
         sql_man.join_event(session["id"], wanted_event)
         flash("you're in!")
         return render_template("eventspage.html", events = events)
@@ -196,39 +208,12 @@ def get_mypage():
         events = sql_man.get_my_events(session["id"])
         flash("you left the event")
         return render_template("mypage.html", events=events)
+    return render_template("mypage.html", events=events)
 
-    return render_template("mypage.html",events=events)
-
-
-@app.route("/myaccount", methods=["GET", "POST"])
+@app.route("/event/<int:index_id>", methods=["GET", "POST"])
 @login_required
-def myaccount():
-    users = sql_man.get_user_infomation(session["id"])
-    if request.method == "POST":
-        name  = request.form.get("username")
-        email = request.form.get("email")
-        password = request.form.get("password")
-        confirmation = request.form.get("confirmation")
-        old_password = request.form.get("oldpassword")
-
-        if password != confirmation:
-            return apology("sorry password not match")
-
-        if email:
-            sql_man.update_user_email(email,session["id"])
-        if name:
-            sql_man.update_user_name(name,session["id"])
-        hashee = sql_man.get_hash(session["id"])
-        if password :
-            if len(hashee) != 1 or not check_password_hash(hashee[0]["hash"], request.form.get("oldpassword")):
-                sql_man.update_user_password(password,session["id"])
-
-        return redirect("/start")
-   # done.
-
-    return render_template("myaccount.html",name = users[0]["username"], email = users[0]["email"])
-
-
-
-
-
+def event(index_id):
+    event = sql_man.show_details(index_id)
+    participants = sql_man.show_participants(index_id)
+    print(participants[0]["user_name"])
+    return render_template("event.html", event = event, participants=participants)
