@@ -38,9 +38,6 @@ main
 {
     /* scroll horizontally as needed */
     overflow-x: auto;
-
-    /* center contents */
-    text-align: center;
 }
 
 main img
@@ -50,17 +47,5 @@ main img
 }
 
 body {
-    background-image: url("http://ckmillerfitness.com/wp-content/uploads/2016/04/running-wallpaper-images-widescreen-hd-desktop-background-free.jpg");
     height: 100%;
-    background-position: center;
-    background-repeat :no-repeat;
-    background-size: cover;
-}
-
-.table_style{
-    font-family:Jazz LET, fantasy;
-    color: white;
-    font-size: 140%;
-    text-shadow: 5px 5px 10px gray;
-    background-color: black;
 }
