@@ -175,6 +175,7 @@ def eventspage():
             flash("there are no events yet")
             return render_template("start.html")
         wanted_event = request.form.get("join")
+        print(wanted_event)
         if sql_man.already_participant(session["id"], wanted_event):
             flash("you're already participating!")
             return render_template("eventspage.html", events = events)
@@ -187,10 +188,16 @@ def eventspage():
 @app.route("/mypage", methods=["GET", "POST"])
 @login_required
 def get_mypage():
-    if request.method == "GET":
+    events = sql_man.get_my_events(session["id"])
+    if request.method == "POST":
+        left_event = request.form.get("leave")
+        print(left_event)
+        sql_man.leave_event(session["id"], left_event)
         events = sql_man.get_my_events(session["id"])
+        flash("you left the event")
         return render_template("mypage.html", events=events)
-    return
+
+    return render_template("mypage.html",events=events)
 
 
 @app.route("/myaccount", methods=["GET", "POST"])
@@ -220,6 +227,7 @@ def myaccount():
    # done.
 
     return render_template("myaccount.html",name = users[0]["username"], email = users[0]["email"])
+
 
 
 
