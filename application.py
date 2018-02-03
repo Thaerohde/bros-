@@ -25,6 +25,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
+
 sql_man = User_Data()
 
 @app.route("/",methods=["GET", "POST"])
@@ -72,7 +73,7 @@ def login():
         session["id"] = rows[0]["id"]
 
         # Redirect user to home page
-        flash("welcome " + username)
+        flash("welcome " + rows[0]["username"])
         return redirect("/start")
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -115,7 +116,6 @@ def register():
 
         # Remember which user has logged in
         session["id"] = newUser
-
         # Redirect user to register page
         flash("Welcome " + username)
         return redirect("/start")
@@ -191,3 +191,36 @@ def get_mypage():
         events = sql_man.get_my_events(session["id"])
         return render_template("mypage.html", events=events)
     return
+
+
+@app.route("/myaccount", methods=["GET", "POST"])
+@login_required
+def myaccount():
+    users = sql_man.get_user_infomation(session["id"])
+    if request.method == "POST":
+        name  = request.form.get("username")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+        old_password = request.form.get("oldpassword")
+
+        if password != confirmation:
+            return apology("sorry password not match")
+
+        if email:
+            sql_man.update_user_email(email,session["id"])
+        if name:
+            sql_man.update_user_name(name,session["id"])
+        hashee = sql_man.get_hash(session["id"])
+        if password :
+            if len(hashee) != 1 or not check_password_hash(hashee[0]["hash"], request.form.get("oldpassword")):
+                sql_man.update_user_password(password,session["id"])
+
+        return redirect("/start")
+   # done.
+
+    return render_template("myaccount.html",name = users[0]["username"], email = users[0]["email"])
+
+
+
+
