@@ -61,7 +61,7 @@ body {
 
 .placepicker-map {
     width: 100%;
-    min-height: 100px;
+    min-height: 200px;
 }
 
 /* Styles copied from Bootstrap 3.1.1 to support glyphicons */
