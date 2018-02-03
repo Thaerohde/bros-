@@ -4,6 +4,7 @@ from flask_session import Session
 from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
 
+
 class User_Data:
     def __init__ (self):
         # Configure CS50 Library to use SQLite database
@@ -14,7 +15,7 @@ class User_Data:
                                     username=username,hash= hash, email=email)
 
     def get_user_info(self, username):
-        return self.db.execute("SELECT * FROM users WHERE username = :username", username=username)
+        return self.db.execute("SELECT * FROM users WHERE email = :username", username=username)
 
     def check_user(self, email):
         return self.db.execute("SELECT * FROM users WHERE email = :email", email = email)
@@ -47,3 +48,26 @@ class User_Data:
             for line in compare:
                 events.append(line)
         return events
+
+    def get_hash(self, name ):
+        return  self.db.execute("SELECT hash FROM users WHERE username = :name ", name = name )
+
+    def get_user_infomation(self, userid):
+        return self.db.execute("SELECT * FROM users WHERE id = :userid", userid=userid)
+
+    def update_user_password(self , password, user_id):
+        return self.db.execute("UPDATE users SET hash = :password where id = :user_id",
+        password = generate_password_hash(password),user_id = user_id)
+
+    def update_user_email(self, email,session):
+        return self.db.execute("UPDATE users SET email = :email where id = :user_id",email= email,user_id = session)
+
+    def update_user_name(self, name ,session):
+        return self.db.execute("UPDATE users SET username = :name where id = :user_id",name = name,user_id = session)
+
+
+
+    def leave_event(self, id, event_id):
+        self.db.execute("DELETE FROM events WHERE id = :id and index_id = :event_id", id = id, event_id = event_id)
+        return self.db.execute("DELETE FROM user_events WHERE user_id = :id and event_id = :event_id", id = id, event_id = event_id)
+
