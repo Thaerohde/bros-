@@ -23,6 +23,11 @@
             <td>{{ event.place }}</td>
             <td>{{ event.date }}</td>
             <td>{{ event.type }}</td>
+            <td>
+              <form name="leave" method="post" action="/mypage">
+                <button name="leave" type="submit" action="/index" value="{{event.index_id}}">Leave</button>
+              </form>
+            </td>
           </tr>
             {% endfor %}
         </tbody>

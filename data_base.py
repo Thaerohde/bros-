@@ -47,3 +47,7 @@ class User_Data:
             for line in compare:
                 events.append(line)
         return events
+
+    def leave_event(self, id, event_id):
+        self.db.execute("DELETE FROM events WHERE id = :id and index_id = :event_id", id = id, event_id = event_id)
+        return self.db.execute("DELETE FROM user_events WHERE user_id = :id and event_id = :event_id", id = id, event_id = event_id)
