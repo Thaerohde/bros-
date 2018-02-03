@@ -13,6 +13,7 @@
             <th>Place</th>
             <th>Date</th>
             <th>Type</th>
+            <th>Leave</th>
             <!--<th>Participants</th>-->
           </tr>
         </thead>
@@ -25,7 +26,7 @@
             <td>{{ event.type }}</td>
             <td>
               <form name="leave" method="post" action="/mypage">
-                <button name="leave" type="submit" action="/index" value="{{event.index_id}}">Leave</button>
+                <button class="btn btn-secondary btn-sm" name="leave" type="submit" action="/index" value="{{event.index_id}}">Leave</button>
               </form>
             </td>
           </tr>

@@ -5,6 +5,11 @@
 {% endblock %}
 
 {% block main %}
+    <div class="fullscreen-bg">
+        <video loop autoplay poster="img/videoframe.jpg" class="fullscreen-bg__video">
+            <source src="/static/video1.mp4" />
+        </video>
+    </div>
     <form action="/login" method="post">
         <div class="form-group">
             <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text"/>

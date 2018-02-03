@@ -43,7 +43,7 @@ body {
 
 .fullscreen-bg{
     position: fixed;
-    top: 0;
+    top: -30px;
     bottom: 0;
     right: 0;
     left: 0;
@@ -61,7 +61,7 @@ body {
 
 .placepicker-map {
     width: 100%;
-    min-height: 100px;
+    min-height: 200px;
 }
 
 /* Styles copied from Bootstrap 3.1.1 to support glyphicons */
